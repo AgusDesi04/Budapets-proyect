@@ -10,7 +10,10 @@ const prodSchema = mongoose.Schema(
     nombre: { type: String, required: true, unique: true },
     edad: { type: String, required: true},
     kilos: { type: String, required: true},
-    precio: {type: Number, required: true},
+    precios: {
+      contado: { type: Number, required: true },
+      tarjeta: { type: Number, required: true },
+    },
     stock: {type: Boolean, default: false},
     thumbnails: []
   }

@@ -1,8 +1,8 @@
 import { productModel } from "./models/productModel.js";
 
-class ProductsManager{
+class ProductsManager {
 
-  static async getProducts(){
+  static async getProducts() {
     try {
       const products = await productModel.find()
       return products
@@ -11,20 +11,32 @@ class ProductsManager{
     }
   }
 
-  static async searchProduct(search){
+  static async searchProduct({ nombre }) {
     try {
-      products = await productModel.find({nombre: {$regex: search, $options: "i"}})
+      console.log("Buscando productos con nombre:", nombre);
+      const products = await productModel.find({ nombre: { $regex: nombre, $options: "i" } })
+      console.log("Productos Encotnrados:", products)
       return products
     } catch (error) {
-      return error 
+      return error
     }
   }
 
-  static async addProduct(product){
+  static async addProduct(product) {
     try {
       return await productModel.create(product)
     } catch (error) {
       return error
+    }
+  }
+
+  static async isProductUnique(nombre) {
+    try {
+      const existingProduct = await productModel.findOne({ nombre })
+      return !existingProduct
+    } catch (error) {
+      console.error("Error verificando unicidad del producto:", error);
+      throw error;
     }
   }
 

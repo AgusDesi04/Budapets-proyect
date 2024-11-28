@@ -6,7 +6,7 @@ import { faker } from '@faker-js/faker';
 export const getProducts = async (req, res, next) => {
   try {
 
-    const products = ProductsManager.getProducts()
+    const products = await ProductsManager.getProducts()
 
     createResponse(req, res, 200, products)
 
@@ -18,10 +18,44 @@ export const getProducts = async (req, res, next) => {
 export const findProductsBySearch = async (req, res, next) => {
   try {
 
-    const search = req.body
-    const products = ProductsManager.searchProduct(search)
+    const nombre = req.body.nombre || ""
+    if(typeof nombre !== "string"){
+      throw new Error("El campo debe ser un string")
+    }
+    const products = await ProductsManager.searchProduct({nombre})
 
     createResponse(req, res, 200, products)
+
+  } catch (error) {
+    next(error)
+  }
+}
+
+export const addProducts = async (req, res, next) => {
+  try {
+    let {  marca, animal, nombre, edad, kilos, precio } = req.body
+
+    const product = [
+      {
+        marca,
+        animal,
+        nombre,
+        edad,
+        kilos,
+        precio
+      }
+    ];
+
+    const isUnique = await ProductsManager.isProductUnique(nombre)
+
+    if(!isUnique){
+      throw new Error(`El producto con el nombre "${nombre}" ya existe.`)
+    }
+
+    const newProduct = await ProductsManager.addProduct(product[0])
+    
+    return createResponse(req, res, 200, newProduct)
+
 
   } catch (error) {
     next(error)
