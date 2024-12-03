@@ -36,7 +36,15 @@ class ProductsManager {
       return !existingProduct
     } catch (error) {
       console.error("Error verificando unicidad del producto:", error);
-      throw error;
+      return error;
+    }
+  }
+
+  static async getById(pid){
+    try {
+      return await  productModel.findById(pid)
+    } catch (error) {
+      return error
     }
   }
 
