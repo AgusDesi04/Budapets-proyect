@@ -7,7 +7,7 @@ class ProductsManager {
       const products = await productModel.find()
       return products
     } catch (error) {
-      return error
+      throw error
     }
   }
 
@@ -18,7 +18,7 @@ class ProductsManager {
       console.log("Productos Encotnrados:", products)
       return products
     } catch (error) {
-      return error
+      throw error
     }
   }
 
@@ -26,7 +26,7 @@ class ProductsManager {
     try {
       return await productModel.create(product)
     } catch (error) {
-      return error
+      throw error
     }
   }
 
@@ -35,8 +35,7 @@ class ProductsManager {
       const existingProduct = await productModel.findOne({ nombre })
       return !existingProduct
     } catch (error) {
-      console.error("Error verificando unicidad del producto:", error);
-      return error;
+      throw error
     }
   }
 
@@ -44,7 +43,22 @@ class ProductsManager {
     try {
       return await  productModel.findById(pid)
     } catch (error) {
-      return error
+      throw error
+    }
+  }
+
+  static async updateProduct(id, productUpdates) {
+    try {
+
+      const updatedProduct = await productsModel.findByIdAndUpdate(id, productUpdates, { new: true });
+
+      if (!updatedProduct) {
+        throw new Error(`No se encontró el producto con ID: ${id}`);
+      }
+
+      return updatedProduct;
+    } catch (error){
+       throw error
     }
   }
 

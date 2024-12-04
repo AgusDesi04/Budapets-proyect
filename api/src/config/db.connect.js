@@ -1,11 +1,12 @@
 import mongoose from "mongoose"
+import env from "../utils/env.utils.js"
 
 
 export const connDB = async () => {
   try {
 
     await mongoose.connect(
-     'mongodb+srv://agusdesi2004:db-agusdesi@cluster0.lsd1h.mongodb.net/base-budapets?retryWrites=true&w=majority&appName=Cluster0',
+      env.MONGO_URL
     )
     console.log('DB CONECTADA!!')
   } catch (error) {
