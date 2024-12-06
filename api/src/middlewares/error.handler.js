@@ -1,6 +1,19 @@
+import env from "../utils/env.utils.js";
 
- export const errorHandler = (error, req, res, next) =>{
-   console.log(error.stack)
-   const status = error.status || 500
-   res.status(status).send(error.message)
-}
+ const errorHandler = (error, req, res, next) => {
+  const status = error.status || 500;
+
+  if (env.mode === "dev") {
+    console.error("Error stack:", error.stack);
+  } else {
+    console.error("Error:", error.message);
+  }
+
+  res.status(status).json({
+    success: false,
+    message: env.mode === "dev" ? error.message : "Error interno del servidor",
+    ...(env.mode === "dev" && { stack: error.stack }) 
+  });
+};
+
+export default errorHandler

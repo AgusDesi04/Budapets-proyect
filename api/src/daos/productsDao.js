@@ -50,7 +50,7 @@ class ProductsManager {
   static async updateProduct(id, productUpdates) {
     try {
 
-      const updatedProduct = await productsModel.findByIdAndUpdate(id, productUpdates, { new: true });
+      const updatedProduct = await productModel.findByIdAndUpdate(id, productUpdates, { new: true });
 
       if (!updatedProduct) {
         throw new Error(`No se encontró el producto con ID: ${id}`);
@@ -61,6 +61,7 @@ class ProductsManager {
        throw error
     }
   }
+
 
 }
 
